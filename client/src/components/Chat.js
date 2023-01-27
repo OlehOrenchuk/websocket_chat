@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { useParams } from "react-router-dom";
 
 const sendIcon = (
   <svg
@@ -22,8 +21,6 @@ function ChatPage() {
   const [messages, setMessages] = React.useState([]);
   const [isConnectionOpen, setConnectionOpen] = React.useState(false);
   const [messageBody, setMessageBody] = React.useState("");
-
-  const { username } = useParams();
 
   const ws = useRef();
 
@@ -72,11 +69,11 @@ function ChatPage() {
 
   return (
     <>
-      <div className="flex flex-row">
+      <div>
         <input
           id="message"
           type="text"
-          className="w-full border-2 border-gray-200 focus:outline-none rounded-md p-2 hover:border-purple-400"
+          className=""
           placeholder="Type your message here..."
           value={messageBody}
           onChange={(e) => setMessageBody(e.target.value)}
@@ -91,27 +88,16 @@ function ChatPage() {
           {sendIcon}
         </button>
       </div>
-      <div id="chat-view-container" className="flex flex-col w-1/3">
+      <div id="chat-view-container" className="">
         {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`my-3 rounded py-3 w-1/3 text-white ${
-              message.sender === username
-                ? "self-end bg-purple-600"
-                : "bg-blue-600"
-            }`}
-          >
-            <div className="flex items-center">
-              <div className="ml-2">
-                <div className="mt-1 text-sm font-semibold leading-5">
-                  {message.body}
-                </div>
-                <div className="flex flex-row">
-                  <div className="text-sm font-medium leading-5 text-gray-900">
-                    {message.sender}
-                  </div>
-                  <div className="ml-1">
-                    <div className="text-sm font-bold leading-5 text-gray-900">
+          <div key={index} className={""}>
+            <div className="">
+              <div className="">
+                <div className="">{message.body}</div>
+                <div className="">
+                  <div className="">{message.sender}</div>
+                  <div className="">
+                    <div className="">
                       {new Date(message.sentAt).toLocaleTimeString(undefined, {
                         timeStyle: "short",
                       })}{" "}
@@ -124,11 +110,6 @@ function ChatPage() {
         ))}
         <div ref={scrollTarget} />
       </div>
-      <footer className="w-1/3">
-        <p>
-          {/* You are chatting as <span className="font-bold">{username}</span> */}
-        </p>
-      </footer>
     </>
   );
 }
