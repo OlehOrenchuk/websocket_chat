@@ -1,11 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Input, Label, Span } from "./Switcher.styles";
 import { ThemeContext } from "styled-components";
-import { cleanup } from "@testing-library/react";
+import io from "socket.io-client";
+
+const socket = io("http://192.168.1.41:4002");
 
 const Switcher = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const ctx = useContext(ThemeContext);
+
+  const [isChecked, setChecked] = useState(false);
 
   const handleSwitcherClick = () => {
     setIsAnimating(true);
@@ -16,14 +20,31 @@ const Switcher = () => {
       clearTimeout(disabledTimeout);
     };
   };
+  const handleCheckbox = (event) => {
+    const isChecked = event.target.checked;
+    console.log(isChecked);
+    socket.emit("checkbox", isChecked);
+  };
 
+  useEffect(() => {
+    socket.on("checkbox", (isChecked) => {
+      setChecked(isChecked);
+    });
+    return () => {
+      socket.off("checkbox");
+    };
+  }, []);
   return (
     <Label>
       <Input
         type="checkbox"
         disabled={isAnimating}
+        checked={isChecked}
         onClick={handleSwitcherClick}
-        onChange={ctx.setDarkTheme}
+        onChange={(e) => {
+          ctx.setDarkTheme();
+          handleCheckbox(e);
+        }}
       />
       <Span>
         <svg

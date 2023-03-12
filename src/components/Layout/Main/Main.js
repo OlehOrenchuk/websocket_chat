@@ -2,17 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Layout, StyledMain } from "./Main.styles";
 import Messages from "../../Message/Messages";
 import AddMessageForm from "../../Message/AddMessageForm";
-import socketIO from "socket.io-client";
+import io from "socket.io-client";
+
+const socket = io("http://192.168.1.41:4002");
 
 const Main = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const socket = socketIO.connect("http://192.168.1.44:4000");
+  const [isChecked, setIsChecked] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
     socket.on("message", (message) => {
       setMessages((messages) => [...messages, message]);
     });
+    socket.on("checkbox", (isChecked) => {
+      setIsChecked(isChecked);
+    });
+    return () => {
+      socket.off("checkbox");
+    };
   }, []);
 
   const handleSubmit = (event) => {
@@ -21,11 +30,17 @@ const Main = () => {
     setMessage("");
   };
 
+  socket.on("typing", (isTyping) => {
+    setIsTyping(isTyping);
+  });
+
   return (
     <StyledMain>
-      <Layout>
+      <Layout isChecked={isChecked} isTyping={isTyping}>
         <Messages messages={messages} />
         <AddMessageForm
+          isTyping={isTyping}
+          setIsTyping={setIsTyping}
           handleSubmit={handleSubmit}
           message={message}
           setMessage={setMessage}

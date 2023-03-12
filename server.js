@@ -19,11 +19,20 @@ io.on("connection", (socket) => {
     io.emit("message", message);
   });
 
+  socket.on("checkbox", (isChecked) => {
+    io.emit("checkbox", isChecked);
+    console.log(isChecked);
+  });
+
+  socket.on("typing", (isTyping) => {
+    socket.broadcast.emit("typing", isTyping);
+  });
+
   socket.on("disconnect", () => {
     console.log("User disconnected");
   });
 });
 
-http.listen(4000, () => {
+http.listen(4002, () => {
   console.log("Server started on port 4000");
 });
