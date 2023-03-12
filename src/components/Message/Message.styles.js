@@ -6,19 +6,20 @@ const TextLayout = styled.div`
       ? props.theme.theme.dark.my_message_layout
       : props.theme.theme.light.my_message_layout};
   border-radius: 20px;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 15px 5px 15px;
   transition: ${(props) => props.theme.theme.default.transition};
 `;
 
 const Text = styled.p`
   margin: 0;
+  line-break: anywhere;
+  width: fit-content;
   font-style: normal;
   font-weight: 300;
   font-size: 13px;
-  //line-height: 15px;
+  line-height: 20px;
   transition: ${(props) => props.theme.theme.default.transition};
   letter-spacing: 1px;
-
   color: #ffffff;
 `;
 

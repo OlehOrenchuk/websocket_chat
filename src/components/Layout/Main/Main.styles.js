@@ -9,6 +9,19 @@ const StyledMain = styled.main`
   z-index: 2;
 `;
 
+const IdMessage = styled.div`
+  font-size: 14px;
+  margin-bottom: 20px;
+  padding: 10px;
+  transition: ${(props) => props.theme.theme.default.transition};
+  color: ${(props) => (props.theme.darkTheme ? "#CCC" : "black")};
+  background: ${(props) =>
+    props.theme.darkTheme
+      ? props.theme.theme.dark.main_background
+      : props.theme.theme.light.main_background};
+  border-radius: 5px;
+`;
+
 const smoothFoodList = keyframes`
   from {
     top: 60px;
@@ -44,7 +57,8 @@ const shadowAnimation = keyframes`
 
 const Layout = styled.section`
   padding: 40px;
-  width: 400px;
+  width: 500px;
+  overflow-wrap: break-word;
   position: relative;
 
   &::before {
@@ -75,4 +89,4 @@ const Layout = styled.section`
     `}
 `;
 
-export { StyledMain, Layout };
+export { StyledMain, Layout, IdMessage };
