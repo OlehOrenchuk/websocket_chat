@@ -35,7 +35,18 @@ io.on("connection", (socket) => {
     });
   });
 
+
+  socket.on("checkbox", (isChecked) => {
+    io.emit("checkbox", isChecked);
+    console.log(isChecked);
+  });
+
+  socket.on("typing", (isTyping) => {
+    socket.broadcast.emit("typing", isTyping);
+  });
+
   socket.broadcast.emit("user-connected", socket.id);
+
 
   socket.on("disconnect", () => {
     // console.log("User disconnected");
@@ -44,6 +55,7 @@ io.on("connection", (socket) => {
     delete users[socket.id];
   });
 });
+
 
 http.listen(4001, () => {
   console.log("Server started on port 4001");

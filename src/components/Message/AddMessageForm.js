@@ -1,4 +1,6 @@
 import React from "react";
+import io from "socket.io-client";
+
 import {
   Form,
   SendButton,
@@ -6,7 +8,18 @@ import {
   StyledAddMessageForm,
 } from "./AddMessageForm.styles";
 
+const socket = io("http://localhost:4002");
+
 const AddMessageForm = (props) => {
+  const handleKeyUp = () => {
+    props.setIsTyping(true);
+    socket.emit("typing", true);
+  };
+
+  const handleBlur = () => {
+    props.setIsTyping(false);
+    socket.emit("typing", false);
+  };
   return (
     <StyledAddMessageForm>
       <Form action="" onSubmit={props.handleSubmit}>
@@ -14,6 +27,8 @@ const AddMessageForm = (props) => {
           placeholder={"Enter message"}
           type="text"
           value={props.message}
+          onKeyUp={handleKeyUp}
+          onBlur={handleBlur}
           onChange={props.handleMessageChange}
         />
         <SendButton disabled={!props.message} type="submit">

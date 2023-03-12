@@ -2,14 +2,19 @@ import React, { useEffect, useState } from "react";
 import { IdMessage, Layout, StyledMain } from "./Main.styles";
 import Messages from "../../Message/Messages";
 import AddMessageForm from "../../Message/AddMessageForm";
-import socketIO from "socket.io-client";
+import io from "socket.io-client";
+
+const socket = io("http://192.168.1.41:4002");
 
 const socket = socketIO.connect("http://192.168.1.44:4001");
 
 const Main = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
+
 
   useEffect(() => {
     // socket.on("message", (message) => {
@@ -36,6 +41,10 @@ const Main = () => {
         { message: `User with id ${username} disconnected` },
       ]);
     });
+    
+    socket.on("checkbox", (isChecked) => {
+      setIsChecked(isChecked);
+    });
 
     socket.on("receive-message", (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
@@ -43,6 +52,7 @@ const Main = () => {
 
     return () => {
       socket.disconnect();
+      socket.off("checkbox");
     };
   }, []);
 
@@ -56,17 +66,23 @@ const Main = () => {
     setMessage("");
   };
 
+  socket.on("typing", (isTyping) => {
+    setIsTyping(isTyping);
+  });
+
   return (
     <StyledMain>
-      <IdMessage>
+     </IdMessage>
         You connected with id{" "}
         <p style={{ display: "inline", color: "red", fontSize: "12px" }}>
           {currentUser}
         </p>
       </IdMessage>
-      <Layout>
+      <Layout isChecked={isChecked} isTyping={isTyping}>
         <Messages messages={messages} />
         <AddMessageForm
+          isTyping={isTyping}
+          setIsTyping={setIsTyping}
           handleSubmit={handleSubmit}
           message={message}
           setMessage={setMessage}
