@@ -1,20 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { IdMessage, Layout, StyledMain } from "./Main.styles";
+import React, { useEffect, useRef, useState } from "react";
+import { IdMessage, CenterMessagesLayout, StyledMain } from "./Main.styles";
 import Messages from "../../Message/Messages";
 import AddMessageForm from "../../Message/AddMessageForm";
-import io from "socket.io-client";
-
-const socket = io("http://192.168.1.41:4002");
-
-const socket = socketIO.connect("http://192.168.1.44:4001");
+import { socket } from "../../../App.js";
 
 const Main = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const [isChecked, setIsChecked] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const [currentUser, setCurrentUser] = useState("");
-
+  const [currentUserId, setCurrentUserId] = useState("");
+  const [user, setUser] = useState(false);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     // socket.on("message", (message) => {
@@ -28,7 +23,7 @@ const Main = () => {
     });
 
     socket.on("connect", () => {
-      setCurrentUser(socket.id);
+      setCurrentUserId(socket.id);
     });
 
     // socket.on("user-connected", (username_id) => {
@@ -41,18 +36,17 @@ const Main = () => {
         { message: `User with id ${username} disconnected` },
       ]);
     });
-    
-    socket.on("checkbox", (isChecked) => {
-      setIsChecked(isChecked);
-    });
 
     socket.on("receive-message", (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
     });
 
     return () => {
+      socket.off("receive-message");
+      socket.off("user-disconnected");
+      socket.off("user-connect");
+      socket.off("user-connected");
       socket.disconnect();
-      socket.off("checkbox");
     };
   }, []);
 
@@ -60,35 +54,53 @@ const Main = () => {
     setMessage(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleUserNameChange = (event) => {
+    setUsername(event.target.value);
+  };
+
+  const handleSubmitMessage = (event) => {
     event.preventDefault();
-    socket.emit("send-message", message);
+    console.log(messages);
+    socket.emit("send-message", message, username);
     setMessage("");
   };
 
-  socket.on("typing", (isTyping) => {
-    setIsTyping(isTyping);
-  });
+  const handleSubmitUser = (event) => {
+    event.preventDefault();
+    setUser(true);
+  };
 
   return (
     <StyledMain>
-     </IdMessage>
+      <IdMessage>
         You connected with id{" "}
         <p style={{ display: "inline", color: "red", fontSize: "12px" }}>
-          {currentUser}
+          {currentUserId}
         </p>
       </IdMessage>
-      <Layout isChecked={isChecked} isTyping={isTyping}>
-        <Messages messages={messages} />
-        <AddMessageForm
-          isTyping={isTyping}
-          setIsTyping={setIsTyping}
-          handleSubmit={handleSubmit}
-          message={message}
-          setMessage={setMessage}
-          handleMessageChange={handleMessageChange}
-        />
-      </Layout>
+      <CenterMessagesLayout>
+        {user ? (
+          <>
+            <Messages currentUserId={currentUserId} messages={messages} />
+            <AddMessageForm
+              handleSubmit={handleSubmitMessage}
+              message={message}
+              setMessage={setMessage}
+              handleMessageChange={handleMessageChange}
+            />
+          </>
+        ) : (
+          <>
+            <form action="" onSubmit={handleSubmitUser}>
+              <input
+                placeholder={"Enter your Name"}
+                type="text"
+                onChange={handleUserNameChange}
+              />
+            </form>
+          </>
+        )}
+      </CenterMessagesLayout>
     </StyledMain>
   );
 };

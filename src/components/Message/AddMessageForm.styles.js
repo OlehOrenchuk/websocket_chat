@@ -10,11 +10,11 @@ const SendInput = styled.input`
   transition: ${(props) => props.theme.theme.default.transition};
   font-size: 16px;
   background-color: ${(props) =>
-    props.theme.darkTheme === true
+    props.theme.darkTheme || props.theme.isChecked
       ? props.theme.theme.dark.message_input_layout
       : props.theme.theme.light.message_input_layout};
   color: ${(props) =>
-    props.theme.darkTheme === true
+    props.theme.darkTheme || props.theme.isChecked
       ? props.theme.theme.dark.text
       : props.theme.theme.light.text};
 `;
@@ -31,11 +31,11 @@ const SendButton = styled(Button)`
   border: none;
   transition: ${(props) => props.theme.theme.default.transition};
   background-color: ${(props) =>
-    props.theme.darkTheme === true
+    props.theme.darkTheme || props.theme.isChecked
       ? props.theme.theme.dark.send_button_layout
       : props.theme.theme.light.send_button_layout};
   color: ${(props) =>
-    props.theme.darkTheme === true
+    props.theme.darkTheme || props.theme.isChecked
       ? props.theme.theme.dark.send_button_text
       : props.theme.theme.light.send_button_text};
 `;

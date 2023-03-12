@@ -22,7 +22,7 @@ const GlobalStyle = createGlobalStyle`
   }
   ::placeholder {
     color: ${(props) =>
-      props.theme.darkTheme === true
+      props.theme.darkTheme || props.theme.isChecked
         ? props.theme.theme.dark.placeholder
         : props.theme.theme.light.placeholder};
   }

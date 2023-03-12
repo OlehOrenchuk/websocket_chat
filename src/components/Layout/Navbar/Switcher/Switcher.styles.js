@@ -43,14 +43,14 @@ const Input = styled.input`
   height: 0;
   &:checked + ${Span} {
     background-color: ${(props) =>
-      props.theme.darkTheme === true
+      props.theme.darkTheme || props.checked
         ? props.theme.theme.dark.switcher
         : props.theme.theme.light.switcher};
   }
   &:hover + ${Span} {
     box-shadow: 0 0 40px
       ${(props) =>
-        props.theme.darkTheme === true
+        props.theme.darkTheme || props.checked
           ? props.theme.theme.dark.switcher
           : props.theme.theme.light.switcher};
   }

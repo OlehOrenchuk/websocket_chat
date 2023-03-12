@@ -17,36 +17,35 @@ io.on("connection", (socket) => {
   // console.log("User connected");
 
   users[socket.id] = socket.id;
-
   // socket.on("message", (message) => {
   //   // console.log("Received message:", message);
   //   io.emit("message", message);
   // });
-
   // socket.on("new-user", (username) => {
   //   users[socket.id] = username;
   //   socket.broadcast.emit("user-connected", username);
   // });
 
-  socket.on("send-message", (message) => {
+  socket.on("send-message", (message, username) => {
+    let createdTime = Date.now(); // Current timestamp
+
     io.emit("receive-message", {
       message: message,
-      username: users[socket.id],
+      user_id: users[socket.id],
+      username: username,
+      createdTime: createdTime,
     });
   });
 
-
   socket.on("checkbox", (isChecked) => {
     io.emit("checkbox", isChecked);
-    console.log(isChecked);
   });
 
-  socket.on("typing", (isTyping) => {
-    socket.broadcast.emit("typing", isTyping);
-  });
+  // socket.on("typing", (isTyping) => {
+  //   socket.broadcast.emit("typing", isTyping);
+  // });
 
   socket.broadcast.emit("user-connected", socket.id);
-
 
   socket.on("disconnect", () => {
     // console.log("User disconnected");
@@ -55,7 +54,6 @@ io.on("connection", (socket) => {
     delete users[socket.id];
   });
 });
-
 
 http.listen(4001, () => {
   console.log("Server started on port 4001");

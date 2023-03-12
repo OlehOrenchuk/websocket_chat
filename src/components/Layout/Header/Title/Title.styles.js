@@ -8,11 +8,11 @@ const StyledTitle = styled.p`
   border-radius: ${(props) => props.theme.theme.default.border_radius};
   transition: ${(props) => props.theme.theme.default.transition};
   color: ${(props) =>
-    props.theme.darkTheme
+    props.theme.darkTheme || props.theme.isChecked
       ? props.theme.theme.dark.text
       : props.theme.theme.light.text};
   background: ${(props) =>
-    props.theme.darkTheme
+    props.theme.darkTheme || props.theme.isChecked
       ? props.theme.theme.dark.main_background
       : props.theme.theme.light.main_background};
 `;

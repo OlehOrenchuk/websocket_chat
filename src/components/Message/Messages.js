@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Message from "./Message";
-import { StyledMessages } from "./Messages.styles";
+import { MessageLayout, StyledMessages } from "./Messages.styles";
 
 const Messages = (props) => {
   const chatWindowRef = useRef(null);
@@ -10,10 +10,24 @@ const Messages = (props) => {
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }, [props.messages]);
 
+  console.log(props.messages);
   return (
     <StyledMessages ref={chatWindowRef}>
       {props.messages.map((data, index) => (
-        <Message key={index} text={data.message} />
+        <MessageLayout
+          key={index}
+          currentUserId={props.currentUserId}
+          user_id={data.user_id}
+        >
+          <Message
+            key={index}
+            currentUserId={props.currentUserId}
+            user_id={data.user_id}
+            username={data.username}
+            text={data.message}
+            time={data.createdTime}
+          />
+        </MessageLayout>
       ))}
     </StyledMessages>
   );
