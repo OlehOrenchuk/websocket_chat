@@ -7,6 +7,9 @@ const StyledMessages = styled.div`
   align-items: flex-end;
   height: 400px;
   overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export { StyledMessages };

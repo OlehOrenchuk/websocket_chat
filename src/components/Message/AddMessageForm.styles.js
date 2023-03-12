@@ -2,11 +2,13 @@ import styled from "styled-components";
 import Button from "../UI/Button/Button";
 
 const SendInput = styled.input`
+  flex-wrap: nowrap;
   border-radius: 10px;
-  padding: 7px;
+  padding: 15px 20px;
   border: none;
+  width: 100%;
   transition: ${(props) => props.theme.theme.default.transition};
-  //font-size: 26px;
+  font-size: 16px;
   background-color: ${(props) =>
     props.theme.darkTheme === true
       ? props.theme.theme.dark.message_input_layout
@@ -18,12 +20,14 @@ const SendInput = styled.input`
 `;
 const Form = styled.form`
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
 `;
 const SendButton = styled(Button)`
   position: absolute;
-  border-radius: 10px;
-  padding: 7px;
+  right: 45px;
+  border-radius: 20px;
+  padding: 10px;
   border: none;
   transition: ${(props) => props.theme.theme.default.transition};
   background-color: ${(props) =>
@@ -39,6 +43,8 @@ const SendButton = styled(Button)`
 const StyledAddMessageForm = styled.div`
   display: flex;
   justify-content: center;
+  padding: 20px 0 0 0;
+  width: 100%;
 `;
 
 export { SendInput, Form, SendButton, StyledAddMessageForm };

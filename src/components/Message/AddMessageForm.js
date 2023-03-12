@@ -11,12 +11,12 @@ const AddMessageForm = (props) => {
     <StyledAddMessageForm>
       <Form action="" onSubmit={props.handleSubmit}>
         <SendInput
-          placeholder={"Write"}
+          placeholder={"Enter message"}
           type="text"
           value={props.message}
-          onChange={(event) => props.setMessage(event.target.value)}
+          onChange={props.handleMessageChange}
         />
-        <SendButton type="submit">
+        <SendButton disabled={!props.message} type="submit">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
